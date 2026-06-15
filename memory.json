@@ -1,0 +1,61 @@
+{
+    "name": "Chiranjeevi",
+    "age": 20,
+    "location": "Amaravathi",
+    "profession": "Student and Web Developer",
+    "college": "SRM AP",
+    "branch": "CSE",
+    "year": "3rd Year",
+    "skills": [
+        "c",
+        "Web Development",
+        "Python",
+        "C++",
+        "Machine Learning",
+        "Data Structures and Algorithms",
+        "AI Agents"
+    ],
+    "interests": [
+        "C++",
+        "AI",
+        "DSA",
+        "Machine Learning"
+    ],
+    "career_goals": [
+        "Become an AI Engineer",
+        "Get hired in a good company",
+        "Be a good person"
+    ],
+    "current_learning": [
+        "AI Agents",
+        "Federated Learning",
+        "DSA",
+        "python"
+    ],
+    "projects": [
+        {
+            "name": "Personal Portfolio",
+            "description": "A personal portfolio website",
+            "technologies": [
+                "HTML",
+                "CSS",
+                "JavaScript"
+            ]
+        },
+        {
+            "name": "Chatbot",
+            "description": "A chatbot project",
+            "technologies": [
+                "Python",
+                "Natural Language Processing"
+            ]
+        }
+    ],
+    "daily_tasks": [
+        "Learn Binary Search"
+    ],
+    "notes": [
+        "Federated Learning protects privacy"
+    ],
+    "memories": []
+}
