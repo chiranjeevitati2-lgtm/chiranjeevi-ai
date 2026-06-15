@@ -31,6 +31,39 @@ st.set_page_config(
     page_title="Chiranjeevi AI",
     layout="wide"
 )
+st.markdown("""
+<style>
+
+/* Sidebar */
+section[data-testid="stSidebar"]{
+    background:#f7f7f8;
+}
+
+/* Buttons */
+.stButton > button{
+    width:100%;
+    border-radius:12px;
+    height:48px;
+    border:1px solid #ddd;
+}
+
+/* Selectbox */
+.stSelectbox div[data-baseweb="select"]{
+    border-radius:12px;
+}
+
+/* Inputs */
+.stTextInput input{
+    border-radius:12px;
+}
+
+/* Hide footer */
+footer{
+    visibility:hidden;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 # ----------------------------
 # CREATE FOLDERS
@@ -110,34 +143,37 @@ if "pdf_text" not in st.session_state:
     st.session_state.pdf_text = ""
 if "voice_prompt" not in st.session_state:
     st.session_state.voice_prompt = ""
+if "show_tools" not in st.session_state:
+    st.session_state.show_tools = False
+if "show_ai_tools" not in st.session_state:
+    st.session_state.show_ai_tools = False
 
 
-if os.path.exists(chat_path):
-
-    try:
-
-        with open(chat_path, "r") as f:
-
-            chat_data = json.load(f)
-
-        if len(st.session_state.messages) == 0:
-
-            st.session_state.messages = chat_data.get(
-                "messages",
-                []
-            )
-
-    except:
-        pass
 # ----------------------------
 # SIDEBAR
 # ----------------------------
 with st.sidebar:
-    st.title("Chiranjeevi AI")
+    st.markdown("""
+    <style>
+    section[data-testid="stSidebar"] {
+    padding-top: 0rem;
+    margin-top:-100px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <h2 style='text-align:center;'>
+    Chiranjeevi AI
+    </h2>
+    """, unsafe_allow_html=True)
+
+ 
+    st.caption("Personal AI Assistant")
 
     # New Chat
 
-    if st.button("➕ New Chat"):
+    if st.button("+ New Chat"):
 
         chat_files = os.listdir("data/chats")
 
@@ -161,28 +197,54 @@ with st.sidebar:
         st.session_state.messages = []
 
         st.rerun()
+    #tools
 
-    # AI Tools
+    if st.button("Add Files&More"):
 
-    st.subheader("AI Tools")
+        st.session_state.show_tools = \
+            not st.session_state.get(
+                "show_tools",
+                False
+                
+            )
 
-    st.link_button(
+    if st.session_state.get("show_tools"):
+
+        uploaded_file = st.file_uploader(
+            " Upload File"
+        )
+
+        st.session_state.web_mode = st.checkbox(
+    "Web Search"
+)
+        st.button(
+            " Voice Input",
+            key="voice_tool"
+        )
+    #ai tools
+    if st.button("AI Tools", key="ai_tools_btn"):
+        st.session_state.show_ai_tools = \
+        not st.session_state.get(
+            "show_ai_tools",
+            False
+        )
+        if st.session_state.get("show_ai_tools"):
+            st.link_button(
         "ChatGPT",
         "https://chatgpt.com"
-    )
-
-    st.link_button(
+        )
+            st.link_button(
         "Claude",
         "https://claude.ai"
-    )
-
-    st.link_button(
+        )
+            st.link_button(
         "Gemini",
         "https://gemini.google.com"
     )
+    #models
     st.divider()
 
-    st.subheader("Model")
+    st.caption("Model")
 
     st.session_state.selected_model = st.selectbox(
     "Choose Model",
@@ -192,29 +254,19 @@ with st.sidebar:
         "qwen3:4b"
     ]
 )
-    st.divider()
-
-    web_mode = st.checkbox(
-    "🌐 Web Search"
-)
+    
 
     # Search Chats
-
     search_chat = st.text_input(
-        "🔍 Search Chats",
-        key="search_chat"
-    )
-
-    # Chats
-
-    st.subheader("Chats")
+    "Search Chats",
+    key="search_chat"
+)
+        # Chats
+    st.caption("Recent Chats")
 
     chat_files = sorted(
-        os.listdir("data/chats")
-    )
-    chat_files = sorted(
-        os.listdir("data/chats")
-    )
+    os.listdir("data/chats")
+)
 
     for chat_file in chat_files:
 
@@ -237,28 +289,52 @@ with st.sidebar:
                 if search_chat.lower() not in title.lower():
                     continue
 
-            if st.button(
-                f"💬 {title}",
-                key=chat_file,
-                use_container_width=True
-            ):
+            col1, col2 = st.columns([5, 1])
 
-                st.session_state.current_chat = chat_file
+            with col1:
 
-                st.session_state.messages = chat_data.get(
-                    "messages",
-                    []
-                )
+                if st.button(
+                    title,
+                    key=f"open_{chat_file}",
+                    use_container_width=True
+                ):
 
-                st.rerun()
+                    st.session_state.current_chat = chat_file
 
+                    st.session_state.messages = chat_data.get(
+                        "messages",
+                        []
+                    )
+
+                    st.rerun()
+
+            with col2:
+
+                with st.popover("⋮"):
+
+                                if st.button(
+                                    "Delete",
+                                    key=f"delete_{chat_file}"
+                                ):
+
+                                    os.remove(
+                                        f"data/chats/{chat_file}"
+                                    )
+                                    st.rerun()
         except:
-            pass
+            pass    
 # ----------------------------
 # MAIN AREA
 # ----------------------------
-st.title("Chiranjeevi AI")
-
+st.markdown("""
+<div style="
+text-align:center;
+margin-top:60px;
+">
+<h1>Chiranjeevi AI</h1>
+<p>How can I help you today?</p>
+</div>
+""", unsafe_allow_html=True)
 # Show previous messages
 
 for msg in st.session_state.messages:
@@ -266,84 +342,10 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-
-# File Upload
-
-uploaded_file = st.file_uploader(
-    "",
-    type=["pdf", "png", "jpg", "jpeg", "txt", "docx"],
-    label_visibility="collapsed"
-)
-pdf_text = ""
-
-if uploaded_file:
-
-    file_path = os.path.join(
-        "uploads",
-        uploaded_file.name
-    )
-
-    with open(file_path, "wb") as f:
-
-        f.write(uploaded_file.getbuffer())
-
-    st.markdown(
-        f"""
-        <div style="
-        padding:10px;
-        border-radius:10px;
-        border:1px solid #555;
-        width:300px;">
-        📄 {uploaded_file.name}
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    if uploaded_file.name.endswith(".pdf"):
-
-        reader = PdfReader(uploaded_file)
-
-        for page in reader.pages:
-
-            text = page.extract_text()
-
-            if text:
-                pdf_text += text + "\n"
-    if pdf_text:
-        st.session_state.pdf_text = pdf_text
-# Voice Input
-
-if st.button("🎤 Speak"):
-
-    recognizer = sr.Recognizer()
-
-    with sr.Microphone() as source:
-
-        st.info("Listening...")
-
-        audio = recognizer.listen(source)
-
-    try:
-
-        voice_text = recognizer.recognize_google(audio)
-
-        st.session_state.voice_prompt = voice_text
-
-        st.success(
-            f"You said: {voice_text}"
-        )
-
-    except:
-
-        st.error(
-            "Could not understand audio"
-        )
-
 # Chat Input
 
 prompt = st.chat_input(
-    "Message to Chiranjeevi AI",
+    "Ask me anything...",
     key="main_chat"
 )
 
@@ -371,7 +373,7 @@ Question:
 #response = chat(...)
 if prompt:
 
-    if web_mode:
+    if st.session_state.get("web_mode", False):
 
         search_results = web_search(prompt)
 
