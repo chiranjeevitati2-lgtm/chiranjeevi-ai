@@ -40,7 +40,8 @@ st.markdown("""
 
 /* Sidebar */
 section[data-testid="stSidebar"]{
-    background:#f7f7f8;
+    background:#081224;
+    border-right:1px solid #1e293b;
 }
 
 /* Buttons */
@@ -48,13 +49,17 @@ section[data-testid="stSidebar"]{
     width:100%;
     border-radius:12px;
     height:48px;
-    border:1px solid #ddd;
+    border:1px solid #1e293b;
 }
 
-/* Selectbox */
+/* Search Box & Selectbox */
+.stTextInput input,
 .stSelectbox div[data-baseweb="select"]{
-    border-radius:12px;
+    background:#111827 !important;
+    color:white !important;
+    border:1px solid #374151 !important;
 }
+
 
 /* Inputs */
 .stTextInput input{
@@ -165,19 +170,10 @@ if "show_ai_tools" not in st.session_state:
 # ----------------------------
 with st.sidebar:
     st.markdown("""
-    <style>
-    section[data-testid="stSidebar"] {
-    padding-top: 0rem;
-    margin-top:-100px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <h2 style='text-align:center;'>
-    Chiranjeevi AI
-    </h2>
-    """, unsafe_allow_html=True)
+<h2 style='text-align:center;color:white;'>
+Chiranjeevi AI
+</h2>
+""", unsafe_allow_html=True)
 
  
     st.caption("Personal AI Assistant")
