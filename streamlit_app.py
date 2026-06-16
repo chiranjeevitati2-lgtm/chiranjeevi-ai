@@ -178,6 +178,7 @@ Chiranjeevi AI
 
     # New Chat
 
+
     if st.button("+ New Chat"):
 
         chat_files = os.listdir("data/chats")
@@ -214,18 +215,65 @@ Chiranjeevi AI
             )
 
     if st.session_state.get("show_tools"):
-
         uploaded_file = st.file_uploader(
-            " Upload File"
-        )
+        "Upload PDF",
+        type=["pdf"]
+    )
 
-        st.session_state.web_mode = st.checkbox(
-    "Web Search"
-)
-        st.button(
-            " Voice Input",
-            key="voice_tool"
-        )
+    if uploaded_file is not None:
+
+        try:
+            pdf = PdfReader(uploaded_file)
+
+            text = ""
+
+            for page in pdf.pages:
+                text += page.extract_text() or ""
+
+            st.session_state.pdf_text = text
+
+            st.success("PDF Loaded Successfully")
+
+        except Exception as e:
+            st.error(f"Error reading PDF: {e}")
+
+    st.session_state.web_mode = st.checkbox(
+        "Web Search"
+    )
+
+   # st.button(
+   #     "Voice Input",
+   #     key="voice_tool",
+    #    disabled=True
+    #)
+       # if st.button(
+       #     "Voice Input",
+       #     key="voice_tool"
+      #    try:
+#                r = sr.Recognizer()
+
+        ##            st.info("Listening...")
+
+         #           audio = r.listen(
+        #                source,
+                #        timeout=5
+ #                   )
+#
+               # text = r.recognize_google(st.audio)
+
+              #  st.session_state.voice_prompt = text
+
+               # st.success(
+              ##      f"You said: {text}"
+#                )
+
+ #               st.rerun()
+
+  #          except Exception as e:
+
+   #             st.error(
+    #                f"Voice Error: {e}"
+     #           )
     #ai tools
     if st.button("AI Tools", key="ai_tools_btn"):
         st.session_state.show_ai_tools = \
