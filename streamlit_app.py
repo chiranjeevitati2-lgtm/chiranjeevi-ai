@@ -1,11 +1,15 @@
 
 import streamlit as st
-from ollama import chat
+from groq import Groq
 from pypdf import PdfReader
 from duckduckgo_search import DDGS
 import speech_recognition as sr
 import json
 import os
+
+client = Groq(
+    api_key=st.secrets["GROQ_API_KEY"]
+)
 
 def web_search(query):
 
@@ -389,8 +393,8 @@ User Question:
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    response = chat(
-        model=st.session_state.selected_model,
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
         messages=[
             {
                 "role": "system",
@@ -411,7 +415,7 @@ User Question:
         }
     )
 
-    answer = response["message"]["content"]
+    answer = response.choices[0].message.content
 
     st.session_state.messages.append(
         {
