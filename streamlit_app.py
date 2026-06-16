@@ -158,8 +158,7 @@ if "show_tools" not in st.session_state:
     st.session_state.show_tools = False
 if "show_ai_tools" not in st.session_state:
     st.session_state.show_ai_tools = False
-
-
+uploaded_file = None
 # ----------------------------
 # SIDEBAR
 # ----------------------------
