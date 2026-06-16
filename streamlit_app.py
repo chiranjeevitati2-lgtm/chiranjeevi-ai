@@ -51,13 +51,6 @@ section[data-testid="stSidebar"]{
     border:1px solid #ddd;
 }
 
-/* Search Box & Selectbox */
-.stTextInput input,
-.stSelectbox div[data-baseweb="select"]{
-    background:#111827 !important;
-    color:white !important;
-    border:1px solid #374151 !important;
-}
 
 
 .stTextInput input{
