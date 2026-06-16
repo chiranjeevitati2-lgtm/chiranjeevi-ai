@@ -165,7 +165,10 @@ if "show_ai_tools" not in st.session_state:
 # ----------------------------
 with st.sidebar:
     st.markdown("""
-<h2 style='text-align:center;color:white;'>
+<h2 style="
+margin-left:10px;
+font-weight:700;
+">
 Chiranjeevi AI
 </h2>
 """, unsafe_allow_html=True)
