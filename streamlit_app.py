@@ -40,8 +40,7 @@ st.markdown("""
 
 /* Sidebar */
 section[data-testid="stSidebar"]{
-    background:#081224;
-    border-right:1px solid #1e293b;
+    border-right:1px solid rgba(128,128,128,0.2);
 }
 
 /* Buttons */
@@ -49,7 +48,7 @@ section[data-testid="stSidebar"]{
     width:100%;
     border-radius:12px;
     height:48px;
-    border:1px solid #1e293b;
+    border:1px solid #ddd;
 }
 
 /* Search Box & Selectbox */
@@ -61,8 +60,11 @@ section[data-testid="stSidebar"]{
 }
 
 
-/* Inputs */
 .stTextInput input{
+    border-radius:12px;
+}
+
+.stSelectbox div[data-baseweb="select"]{
     border-radius:12px;
 }
 
