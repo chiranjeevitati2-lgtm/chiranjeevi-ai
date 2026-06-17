@@ -2,6 +2,7 @@ import streamlit as st
 from groq import Groq
 from pypdf import PdfReader
 from duckduckgo_search import DDGS
+import requests
 import speech_recognition as sr
 import json
 import os
@@ -9,34 +10,40 @@ import os
 client = Groq(
     api_key=st.secrets["GROQ_API_KEY"]
 )
-
 def web_search(query):
 
     try:
 
+        url = "https://google.serper.dev/search"
+
+        payload = {
+            "q": query
+        }
+
+        headers = {
+            "X-API-KEY": st.secrets["SERPER_API_KEY"],
+            "Content-Type": "application/json"
+        }
+
+        response = requests.post(
+            url,
+            json=payload,
+            headers=headers
+        )
+
+        data = response.json()
+
         results = []
 
-        with DDGS() as ddgs:
+        if "organic" in data:
 
-            if any(word in query.lower() for word in
-                   ["latest", "today", "news", "breaking"]):
+            for item in data["organic"][:5]:
 
-                data = ddgs.news(
-                    query,
-                    max_results=10
-                )
-
-            else:
-
-                data = ddgs.text(
-                    query,
-                    max_results=5
-                )
-
-            for r in data:
+                title = item.get("title", "")
+                snippet = item.get("snippet", "")
 
                 results.append(
-                    f"{r['title']}\n{r['body']}"
+                    f"{title}\n{snippet}"
                 )
 
         if not results:
