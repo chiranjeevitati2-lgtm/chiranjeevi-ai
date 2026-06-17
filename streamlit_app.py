@@ -13,19 +13,29 @@ client = Groq(
 
 def web_search(query):
 
-    results = []
+    try:
 
-    with DDGS() as ddgs:
+        results = []
 
-        for r in ddgs.text(
-            query,
-            max_results=5
-        ):
-            results.append(
-                f"{r['title']}\n{r['body']}"
-            )
+        with DDGS() as ddgs:
 
-    return "\n\n".join(results)
+            for r in ddgs.text(
+                query,
+                max_results=5
+            ):
+
+                results.append(
+                    f"{r['title']}\n{r['body']}"
+                )
+
+        if not results:
+            return "No search results found."
+
+        return "\n\n".join(results)
+
+    except Exception as e:
+
+        return f"SEARCH ERROR: {str(e)}"
 
 # ----------------------------
 # PAGE CONFIG
@@ -428,7 +438,7 @@ if prompt:
     if st.session_state.get("web_mode", False):
 
         search_results = web_search(prompt)
-        st.write(search_results)
+        st.error(search_results)
 
         user_message = f"""
 Web Search Results:
