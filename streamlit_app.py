@@ -1,4 +1,3 @@
-
 import streamlit as st
 from groq import Groq
 from pypdf import PdfReader
@@ -19,10 +18,22 @@ def web_search(query):
 
         with DDGS() as ddgs:
 
-            for r in ddgs.text(
-                query,
-                max_results=5
-            ):
+            if any(word in query.lower() for word in
+                   ["latest", "today", "news", "breaking"]):
+
+                data = ddgs.news(
+                    query,
+                    max_results=10
+                )
+
+            else:
+
+                data = ddgs.text(
+                    query,
+                    max_results=5
+                )
+
+            for r in data:
 
                 results.append(
                     f"{r['title']}\n{r['body']}"
@@ -148,6 +159,10 @@ Do not say:
 - "I'm an AI language model"
 - "I don't have a personal identity"
 - "I'm just an AI assistant"
+
+If Web Search Results are provided,
+use them as the primary source of information.
+Prefer search results over old model knowledge.
 When web search results are provided:
 
 - Use only relevant search results.
@@ -446,15 +461,13 @@ if prompt:
 
     if st.session_state.get("web_mode", False):
 
-        search_results = web_search(
-    f"{prompt} latest"
-)
+        search_results = web_search(prompt)
 
-        user_message = f"""
-        Use the web search results below.
-        Carefully analyze whether the search results
+        user_message += f"""
+
+Use the web search results below.
+Carefully analyze whether the search results
 are relevant to the user's question.
-
 
 If the search results are irrelevant,
 answer using your own knowledge.
