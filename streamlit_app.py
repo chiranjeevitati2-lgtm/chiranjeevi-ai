@@ -255,7 +255,7 @@ Chiranjeevi AI
 
                 st.error(f"Error reading PDF: {e}")
 
-        st.session_state.web_mode = st.checkbox(
+    st.session_state.web_mode = st.checkbox(
             "Web Search"
         )
 
