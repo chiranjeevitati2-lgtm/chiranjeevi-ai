@@ -468,7 +468,7 @@ if prompt:
 
     if st.session_state.get("web_mode", False):
 
-        search_results = web_search(prompt+"ipl,cricket,lates news,latest updates")
+        search_results = web_search(prompt)
         st.write(search_results)
 
         user_message += f"""
