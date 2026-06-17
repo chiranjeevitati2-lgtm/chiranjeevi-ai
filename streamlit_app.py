@@ -461,7 +461,7 @@ if prompt:
 
     if st.session_state.get("web_mode", False):
 
-        search_results = web_search(prompt+"ipl, cricket, news, latest, today, breaking,war, india, pakistan, australia, england, south africa, new zealand, sri lanka, west indies, bangladesh, afghanistan, odi, t20i, test match,world news, sports news, cricket news, latest news, breaking news, current affairs, trending news, top stories, headlines, updates, live scores, match results, sports updates, cricket updates, sports headlines, cricket headlines,latest information, recent news, news articles, news updates, news headlines, news stories, news reports, news coverage, news analysis, news commentary, news insights, news opinions, news perspectives, news reviews, news summaries, news digests, news briefs, news highlights, news recaps, news roundups, news overviews, news snapshots, news bulletins, news alerts, news notifications")
+        search_results = web_search(prompt+"ipl,cricket,lates news,latest updates")
         st.write(search_results)
 
         user_message += f"""
