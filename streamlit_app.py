@@ -192,9 +192,7 @@ Chiranjeevi AI
 
  
     st.caption("Personal AI Assistant")
-
     # New Chat
-
 
     if st.button("+ New Chat"):
 
@@ -220,44 +218,46 @@ Chiranjeevi AI
         st.session_state.messages = []
 
         st.rerun()
-        # tools
 
-        if st.button("Add Files&More"):
 
-            st.session_state.show_tools = not st.session_state.get(
-                "show_tools",
-                False
-            )
+    # Tools
 
-        if st.session_state.get("show_tools"):
+    if st.button("Add Files&More"):
 
-            uploaded_file = st.file_uploader(
-                "Upload PDF",
-                type=["pdf"]
-            )
+        st.session_state.show_tools = not st.session_state.get(
+            "show_tools",
+            False
+        )
 
-            if uploaded_file is not None:
+    if st.session_state.get("show_tools"):
 
-                try:
+        uploaded_file = st.file_uploader(
+            "Upload PDF",
+            type=["pdf"]
+        )
 
-                    pdf = PdfReader(uploaded_file)
+        if uploaded_file is not None:
 
-                    text = ""
+            try:
 
-                    for page in pdf.pages:
-                        text += page.extract_text() or ""
+                pdf = PdfReader(uploaded_file)
 
-                    st.session_state.pdf_text = text
+                text = ""
 
-                    st.success("PDF Loaded Successfully")
+                for page in pdf.pages:
+                    text += page.extract_text() or ""
 
-                except Exception as e:
+                st.session_state.pdf_text = text
 
-                    st.error(f"Error reading PDF: {e}")
+                st.success("PDF Loaded Successfully")
 
-            st.session_state.web_mode = st.checkbox(
-                "Web Search"
-            )
+            except Exception as e:
+
+                st.error(f"Error reading PDF: {e}")
+
+        st.session_state.web_mode = st.checkbox(
+            "Web Search"
+        )
 
    # st.button(
    #     "Voice Input",
