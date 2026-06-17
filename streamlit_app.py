@@ -437,10 +437,18 @@ if prompt:
 
     if st.session_state.get("web_mode", False):
 
-        search_results = web_search(prompt)
+        search_results = web_search(prompt+"latest information")
         st.error(search_results)
 
         user_message = f"""
+        Use the web search results below.
+        Carefully analyze whether the search results
+are relevant to the user's question.
+
+
+If the search results are irrelevant,
+answer using your own knowledge.
+
 Web Search Results:
 
 {search_results}
