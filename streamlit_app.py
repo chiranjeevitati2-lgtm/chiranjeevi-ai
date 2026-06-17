@@ -147,7 +147,13 @@ I can help with coding, studies, projects, AI, productivity, and general questio
 Do not say:
 - "I'm an AI language model"
 - "I don't have a personal identity"
-- "I'm just an AI assistant"""
+- "I'm just an AI assistant"
+When web search results are provided:
+
+- Use only relevant search results.
+- Ignore unrelated search results.
+- Prefer recent information from search results.
+- If results are unrelated, clearly say so."""
 # ----------------------------
 # SESSION
 # ----------------------------
@@ -168,6 +174,8 @@ if "show_tools" not in st.session_state:
     st.session_state.show_tools = False
 if "show_ai_tools" not in st.session_state:
     st.session_state.show_ai_tools = False
+if "web_mode" not in st.session_state:
+    st.session_state.web_mode = False
 uploaded_file = None
 # ----------------------------
 # SIDEBAR
@@ -212,43 +220,44 @@ Chiranjeevi AI
         st.session_state.messages = []
 
         st.rerun()
-    #tools
+        # tools
 
-    if st.button("Add Files&More"):
+        if st.button("Add Files&More"):
 
-        st.session_state.show_tools = \
-            not st.session_state.get(
+            st.session_state.show_tools = not st.session_state.get(
                 "show_tools",
                 False
-                
             )
 
-    if st.session_state.get("show_tools"):
-        uploaded_file = st.file_uploader(
-        "Upload PDF",
-        type=["pdf"]
-    )
+        if st.session_state.get("show_tools"):
 
-    if uploaded_file is not None:
+            uploaded_file = st.file_uploader(
+                "Upload PDF",
+                type=["pdf"]
+            )
 
-        try:
-            pdf = PdfReader(uploaded_file)
+            if uploaded_file is not None:
 
-            text = ""
+                try:
 
-            for page in pdf.pages:
-                text += page.extract_text() or ""
+                    pdf = PdfReader(uploaded_file)
 
-            st.session_state.pdf_text = text
+                    text = ""
 
-            st.success("PDF Loaded Successfully")
+                    for page in pdf.pages:
+                        text += page.extract_text() or ""
 
-        except Exception as e:
-            st.error(f"Error reading PDF: {e}")
+                    st.session_state.pdf_text = text
 
-    st.session_state.web_mode = st.checkbox(
-        "Web Search"
-    )
+                    st.success("PDF Loaded Successfully")
+
+                except Exception as e:
+
+                    st.error(f"Error reading PDF: {e}")
+
+            st.session_state.web_mode = st.checkbox(
+                "Web Search"
+            )
 
    # st.button(
    #     "Voice Input",
@@ -437,8 +446,9 @@ if prompt:
 
     if st.session_state.get("web_mode", False):
 
-        search_results = web_search(prompt+"latest information")
-        st.error(search_results)
+        search_results = web_search(
+    f"{prompt} latest"
+)
 
         user_message = f"""
         Use the web search results below.
