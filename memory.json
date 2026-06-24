@@ -6,6 +6,28 @@
     "college": "SRM AP",
     "branch": "CSE",
     "year": "3rd Year",
+    "specialfriend": {
+        "name": "tanusri",
+        "relation": "special Friend"
+    },
+    "friends": [
+        {
+            "name": "Abdul Rasool",
+            "relation": "Friend"
+        },
+        {
+            "name": "Manohar",
+            "relation": "Friend"
+        },
+        {
+            "name": "Mahesh",
+            "relation": "Friend"
+        },
+        {
+            "name": "Vishnu",
+            "relation": "Friend"
+        }
+    ],
     "skills": [
         "c",
         "Web Development",
