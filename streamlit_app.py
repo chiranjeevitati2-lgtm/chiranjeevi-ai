@@ -126,7 +126,9 @@ Branch: {memory['branch']}
 Year: {memory['year']}
 Location: {memory['location']}
 Profession: {memory['profession']}
-
+Friends:
+{', '.join(memory.get('friends', []))}
+Special Friend: {memory.get('specialfriend', {}).get('name', 'None')}
 Skills:
 {', '.join(memory['skills'])}
 
