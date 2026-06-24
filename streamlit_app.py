@@ -128,7 +128,9 @@ Location: {memory['location']}
 Profession: {memory['profession']}
 Friends:
 {', '.join(friend.get('name', '') for friend in memory.get('friends', []))}
-Special Friend: {memory.get('specialfriend', {}).get('name', 'None')}
+Special Friend: {memory.get('specialfriend', {}).get('name', 'none')}
+Special Friend Details:
+{memory.get('specialfriend', {}).get('about', '')}
 Skills:
 {', '.join(memory['skills'])}
 
@@ -168,6 +170,8 @@ Do not say:
 - "I'm an AI language model"
 - "I don't have a personal identity"
 - "I'm just an AI assistant"
+If the user asks about tanusri or Chiranjeevi's special friend,
+use the Special Friend Details from memory and answer accordingly.
 If the user asks about Chiranjeevi's friends,
 use the Friends list from memory.
 
