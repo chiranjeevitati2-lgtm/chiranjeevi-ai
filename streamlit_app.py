@@ -6,6 +6,12 @@ import requests
 import speech_recognition as sr
 import json
 import os
+from supabase import create_client
+
+supabase = create_client(
+    st.secrets["SUPABASE_URL"],
+    st.secrets["SUPABASE_KEY"]
+)
 
 client = Groq(
     api_key=st.secrets["GROQ_API_KEY"]
@@ -368,23 +374,19 @@ Chiranjeevi AI
         # Chats
     st.caption("Recent Chats")
 
-    chat_files = sorted(
-    os.listdir("data/chats")
-)
+    try:
 
-    for chat_file in chat_files:
+        result = supabase.table("chats") \
+            .select("*") \
+            .order("created_at", desc=True) \
+            .execute()
 
-        try:
+        chats = result.data
 
-            with open(
-                f"data/chats/{chat_file}",
-                "r"
-            ) as f:
+        for chat in chats:
 
-                chat_data = json.load(f)
-
-            title = chat_data.get(
-                "title",
+            title = chat.get(
+                "chat_title",
                 "New Chat"
             )
 
@@ -393,40 +395,22 @@ Chiranjeevi AI
                 if search_chat.lower() not in title.lower():
                     continue
 
-            col1, col2 = st.columns([5, 1])
+            if st.button(
+                title,
+                key=f"chat_{chat['id']}",
+                use_container_width=True
+            ):
 
-            with col1:
+                st.session_state.messages = chat.get(
+                    "messages",
+                    []
+                )
 
-                if st.button(
-                    title,
-                    key=f"open_{chat_file}",
-                    use_container_width=True
-                ):
+                st.rerun()
 
-                    st.session_state.current_chat = chat_file
+    except Exception as e:
 
-                    st.session_state.messages = chat_data.get(
-                        "messages",
-                        []
-                    )
-
-                    st.rerun()
-
-            with col2:
-
-                with st.popover("⋮"):
-
-                                if st.button(
-                                    "Delete",
-                                    key=f"delete_{chat_file}"
-                                ):
-
-                                    os.remove(
-                                        f"data/chats/{chat_file}"
-                                    )
-                                    st.rerun()
-        except:
-            pass    
+        st.error(f"Supabase Error: {e}")    
 # ----------------------------
 # MAIN AREA
 # ----------------------------
@@ -533,6 +517,23 @@ User Question:
         }
     )
 
+    try:
+
+        supabase.table("chats").insert({
+            "user_id": "guest",
+            "chat_title": prompt[:40],
+            "messages": st.session_state.messages
+        }).execute()
+
+    except Exception as e:
+
+        st.error(f"Supabase Save Error: {e}")
+
+    with st.chat_message("assistant"):
+        st.markdown(answer)
+
+    
+
     # ----------------------------
     # SAVE CHAT
     # ----------------------------
@@ -556,8 +557,5 @@ User Question:
     if chat_data["title"] == "New Chat":
         chat_data["title"] = prompt[:40]
 
-    with open(chat_file, "w") as f:
-        json.dump(chat_data, f, indent=4)
-
-    with st.chat_message("assistant"):
-        st.markdown(answer)
+   # with open(chat_file, "w") as f:
+    #    json.dump(chat_data, f, indent=4)
