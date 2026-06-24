@@ -127,7 +127,7 @@ Year: {memory['year']}
 Location: {memory['location']}
 Profession: {memory['profession']}
 Friends:
-{', '.join(memory.get('friends', []))}
+{', '.join(friend.get('name', '') for friend in memory.get('friends', []))}
 Special Friend: {memory.get('specialfriend', {}).get('name', 'None')}
 Skills:
 {', '.join(memory['skills'])}
@@ -168,6 +168,11 @@ Do not say:
 - "I'm an AI language model"
 - "I don't have a personal identity"
 - "I'm just an AI assistant"
+If the user asks about Chiranjeevi's friends,
+use the Friends list from memory.
+
+If the user asks about Chiranjeevi's special friend,
+use the Special Friend information from memory.
 
 If Web Search Results are provided,
 use them as the primary source of information.
